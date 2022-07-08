@@ -4,6 +4,7 @@ import br.unb.cic.oberon.visitor.OberonVisitor
 import br.unb.cic.oberon.environment.Environment
 import scala.collection.mutable.Map
 import scala.collection.mutable.ListBuffer
+import br.unb.cic.oberon.visitor.Visitable
 
 
 /** Abstract representation of an Oberon Module
@@ -25,9 +26,7 @@ case class OberonModule(name: String,
                         variables: List[VariableDeclaration],
                         procedures: List[Procedure],
                         stmt: Option[Statement]
-                       ) {
-  def accept(v: OberonVisitor): v.T = v.visit(this)
-}
+                       ) extends Visitable
 
 // SequenceStatement(List[Stmt]) extends Stmt
 // alternativa: SequenceStatement(stmt, stmt) extends Stmt
@@ -40,13 +39,10 @@ case class Procedure(name: String,
                      constants: List[Constant],
                      variables: List[VariableDeclaration],
                      stmt: Statement
-                    ) {
-  def accept(v: OberonVisitor): v.T = v.visit(this)
-}
+                    ) extends Visitable
 
 /* formal argument definition */
-trait FormalArg{
-  def accept(v: OberonVisitor): v.T = v.visit(this)
+trait FormalArg extends Visitable{
   def argumentType: Type
   def name: String
 }
@@ -55,25 +51,17 @@ case class ParameterByReference(name: String, argumentType: Type) extends Formal
 
 
   /* Imports */
-case class Import(name: String){
-  def accept(v: OberonVisitor): v.T = v.visit(this)
-}
+case class Import(name: String) extends Visitable
 
 
 /* Constant definition */
-case class Constant(name: String, exp: Expression) {
-  def accept(v: OberonVisitor): v.T = v.visit(this)
-}
+case class Constant(name: String, exp: Expression) extends Visitable
 
 /* Variable declaration definition */
-case class VariableDeclaration(name: String, variableType: Type) {
-  def accept(v: OberonVisitor): v.T = v.visit(this)
-}
+case class VariableDeclaration(name: String, variableType: Type) extends Visitable
 
 /* Expressions */
-trait Expression {
-  def accept(v: OberonVisitor): v.T = v.visit(this)
-}
+trait Expression extends Visitable
 
 sealed abstract class Value extends Expression with Ordered[Value]{
   type T
@@ -185,9 +173,8 @@ case class ModExpression(left: Expression, right: Expression) extends Expression
 case class NotExpression(exp: Expression) extends Expression
 
 /* Statements */
-trait Statement {
+trait Statement extends Visitable{
   val label = Statement.getLabel()
-  def accept(v: OberonVisitor): v.T = v.visit(this)
 }
 
 object Statement{
@@ -225,9 +212,7 @@ case class CaseStmt(exp: Expression, cases: List[CaseAlternative], elseStmt: Opt
 case class ExitStmt() extends Statement
 case class MetaStmt(f: () => Statement) extends Statement
 
-trait CaseAlternative {
-  def accept(v: OberonVisitor): v.T = v.visit(this)
-}
+trait CaseAlternative extends Visitable
 
 case class SimpleCase(condition: Expression, stmt: Statement) extends CaseAlternative
 case class RangeCase(min: Expression, max: Expression, stmt: Statement) extends CaseAlternative
@@ -246,14 +231,10 @@ case class PointerAssignment(pointerName: String) extends Designator
  * Users can declare either records or
  * array types.
  */
-case class UserDefinedType(name: String, baseType: Type) {
-  def accept(v: OberonVisitor): v.T = v.visit(this)
-}
+case class UserDefinedType(name: String, baseType: Type) extends Visitable
 
 /** The hierarchy for the Oberon supported types */
-sealed trait Type {
-  def accept(v: OberonVisitor): v.T = v.visit(this)
-}
+sealed trait Type extends Visitable
 
 case object IntegerType extends Type
 case object RealType extends Type

@@ -16,7 +16,7 @@ class StandardLibraryTest extends AnyFunSuite {
 
     assert(module.name == "INCTest")
 
-    module.accept(interpreter)
+    module.accept[Unit](interpreter)
 
     assert(interpreter.env.lookup("x") == Some(RealValue(10.0)))
     assert(interpreter.env.lookup("y") == Some(IntValue(-7)))

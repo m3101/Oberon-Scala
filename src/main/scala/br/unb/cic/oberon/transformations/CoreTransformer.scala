@@ -1,35 +1,34 @@
 package br.unb.cic.oberon.transformations
 
 import br.unb.cic.oberon.ast._
-import br.unb.cic.oberon.visitor.OberonVisitorAdapter
 import scala.collection.mutable.ListBuffer
 import br.unb.cic.oberon.ast.Procedure
+import br.unb.cic.oberon.visitor.OberonVisitor
 
-class CoreVisitor() extends OberonVisitorAdapter {
-  override type T = Statement
+class CoreVisitor() extends OberonVisitor[Statement] {  
   
   var addedVariables: List[VariableDeclaration] = Nil
 
-  override def visit(stmt: Statement): Statement = stmt match {
+  def visit(stmt: Statement): Statement = stmt match {
     case SequenceStmt(stmts) =>
       SequenceStmt(flatSequenceOfStatements(SequenceStmt(transformListStmts(stmts)).stmts))
 
     case LoopStmt(stmt) =>
-      WhileStmt(BoolValue(true), stmt.accept(this))
+      WhileStmt(BoolValue(true), stmt.accept[Statement,CoreVisitor](this))
 
     case RepeatUntilStmt(condition, stmt) =>
-      WhileStmt(BoolValue(true), SequenceStmt(List(stmt.accept(this), IfElseStmt(condition, ExitStmt(), None))).accept(this))
+      WhileStmt(BoolValue(true), SequenceStmt(List(stmt.accept[Statement,CoreVisitor](this), IfElseStmt(condition, ExitStmt(), None))).accept[Statement,CoreVisitor](this))
 
     case ForStmt(initStmt, condition, block) =>
-      SequenceStmt(List(initStmt.accept(this), WhileStmt(condition, block.accept(this))))
+      SequenceStmt(List(initStmt.accept[Statement,CoreVisitor](this), WhileStmt(condition, block.accept[Statement,CoreVisitor](this))))
 
     case IfElseIfStmt (condition, thenStmt, elsifStmt, elseStmt) =>
-      IfElseStmt (condition, thenStmt.accept(this), Some(transformElsif(elsifStmt, elseStmt)))
+      IfElseStmt (condition, thenStmt.accept[Statement,CoreVisitor](this), Some(transformElsif(elsifStmt, elseStmt)))
 
     case CaseStmt(exp, cases, elseStmt) => transformCase(exp, cases, elseStmt)
 
     case WhileStmt(condition, stmt) =>
-      WhileStmt(condition, stmt.accept(this))
+      WhileStmt(condition, stmt.accept[Statement,CoreVisitor](this))
 
     case _ => stmt
   }
@@ -43,7 +42,7 @@ class CoreVisitor() extends OberonVisitorAdapter {
   }
 
   private def transformCase(exp: Expression, cases: List[CaseAlternative], elseStmt: Option[Statement]): Statement = {
-    val coreElseStmt = if (elseStmt.isEmpty) None else Some(elseStmt.get.accept(this))
+    val coreElseStmt = if (elseStmt.isEmpty) None else Some(elseStmt.get.accept[Statement,CoreVisitor](this))
 
     // TODO corrigir comportamento para outras expressões
 
@@ -58,20 +57,20 @@ class CoreVisitor() extends OberonVisitorAdapter {
         case SimpleCase(condition, stmt) :: Nil =>
           val newCondition =
             EQExpression(VarExpression(caseExpressionId), condition)
-          IfElseStmt(newCondition, stmt.accept(this), coreElseStmt)
+          IfElseStmt(newCondition, stmt.accept[Statement,CoreVisitor](this), coreElseStmt)
 
         case SimpleCase(condition, stmt) :: tailCases =>
           val newCondition =
             EQExpression(VarExpression(caseExpressionId), condition)
           val newElse = Some(casesToIfElseStmt(tailCases))
-          IfElseStmt(newCondition, stmt.accept(this), newElse)
+          IfElseStmt(newCondition, stmt.accept[Statement,CoreVisitor](this), newElse)
 
         case RangeCase(min, max, stmt) :: Nil =>
           val newCondition = AndExpression(
             LTEExpression(min, VarExpression(caseExpressionId)),
             LTEExpression(VarExpression(caseExpressionId), max)
           )
-          IfElseStmt(newCondition, stmt.accept(this), coreElseStmt)
+          IfElseStmt(newCondition, stmt.accept[Statement,CoreVisitor](this), coreElseStmt)
 
         case RangeCase(min, max, stmt) :: tailCases =>
           val newCondition = AndExpression(
@@ -79,7 +78,7 @@ class CoreVisitor() extends OberonVisitorAdapter {
             LTEExpression(VarExpression(caseExpressionId), max)
           )
           val newElse = Some(casesToIfElseStmt(tailCases))
-          IfElseStmt(newCondition, stmt.accept(this), newElse)
+          IfElseStmt(newCondition, stmt.accept[Statement,CoreVisitor](this), newElse)
 
         case _ => throw new RuntimeException("Invalid CaseStmt without cases")
       }
@@ -93,21 +92,21 @@ class CoreVisitor() extends OberonVisitorAdapter {
   }
 
   private def transformElsif (elsifStmts: List[ElseIfStmt], elseStmt: Option[Statement]): Statement = {
-    val coreElseStmt = if (elseStmt.isEmpty) None else Some(elseStmt.get.accept(this))
+    val coreElseStmt = if (elseStmt.isEmpty) None else Some(elseStmt.get.accept[Statement,CoreVisitor](this))
     val currentElsif = elsifStmts.head
 
     if (elsifStmts.tail.isEmpty) {
-      IfElseStmt(currentElsif.condition, currentElsif.thenStmt.accept(this), coreElseStmt)
+      IfElseStmt(currentElsif.condition, currentElsif.thenStmt.accept[Statement,CoreVisitor](this), coreElseStmt)
     } else {
       val nextElsif = Some(transformElsif(elsifStmts.tail, coreElseStmt))
-      IfElseStmt(currentElsif.condition, currentElsif.thenStmt.accept(this), nextElsif)
+      IfElseStmt(currentElsif.condition, currentElsif.thenStmt.accept[Statement,CoreVisitor](this), nextElsif)
     }
   }
 
   private def transformListStmts(stmtsList: List[Statement], stmtsCore: ListBuffer[Statement] = new ListBuffer[Statement]): List[Statement] = {
 
     if (!stmtsList.isEmpty){
-      stmtsCore += stmtsList.head.accept(this);
+      stmtsCore += stmtsList.head.accept[Statement,CoreVisitor](this);
       stmtsCore :: transformListStmts(stmtsList.tail, stmtsCore)
     }
     else {
@@ -123,7 +122,7 @@ class CoreVisitor() extends OberonVisitorAdapter {
 
     for (procedure <- listProcedures){
       addedVariables = Nil
-      val coreStmt = procedure.stmt.accept(this)
+      val coreStmt = procedure.stmt.accept[Statement,CoreVisitor](this)
       listProceduresCore += Procedure(name = procedure.name,
         args = procedure.args,
         referenceMap = procedure.referenceMap,
@@ -145,7 +144,7 @@ class CoreVisitor() extends OberonVisitorAdapter {
   def transformModule(module: OberonModule): OberonModule = {
     
     val stmtprocedureList = transformProcedureListStatement(module.procedures)
-    val stmtcore = module.stmt.get.accept(this)
+    val stmtcore = module.stmt.get.accept[Statement,CoreVisitor](this)
 
      val coreModule = OberonModule(
       name = module.name,
@@ -162,12 +161,10 @@ class CoreVisitor() extends OberonVisitorAdapter {
 
 }
 
-object CoreChecker extends OberonVisitorAdapter {
+object CoreChecker extends OberonVisitor[Unit] {
   private var isCore = true
 
-  override type T = Unit
-
-  override def visit(stmt: Statement): Unit = {
+  def visit(stmt: Statement): Unit = {
 
     if (!isCore) {
       return
@@ -184,10 +181,10 @@ object CoreChecker extends OberonVisitorAdapter {
       case CaseStmt(exp, cases, elseStmt) => isCore = false
 
       // Outros casos com SequenceStmt
-      case WhileStmt(condition, whileStmt) => whileStmt.accept(this)
-      case IfElseStmt(condition, thenStmt, elseStmt) => thenStmt.accept(this);
+      case WhileStmt(condition, whileStmt) => whileStmt.accept[Unit,OberonVisitor[Unit]](this)
+      case IfElseStmt(condition, thenStmt, elseStmt) => thenStmt.accept[Unit,OberonVisitor[Unit]](this);
         elseStmt match {
-          case Some(f) => Some(elseStmt.get.accept((this)))
+          case Some(f) => Some(elseStmt.get.accept[Unit,OberonVisitor[Unit]]((this)))
           case None => ()
         }
 
@@ -197,25 +194,25 @@ object CoreChecker extends OberonVisitorAdapter {
 
   private def transformListStmts(stmtsList: List[Statement], stmtsCore: ListBuffer[Statement] = new ListBuffer[Statement]): Unit = {
     if (stmtsList.nonEmpty){
-      stmtsList.head.accept(this);
+      stmtsList.head.accept[Unit,OberonVisitor[Unit]](this);
       transformListStmts(stmtsList.tail)
     }
   }
 
   private def checkProcedureStmts(listProcedures: List[Procedure]): Unit = {
     for (procedure <- listProcedures){
-      procedure.stmt.accept(this)
+      procedure.stmt.accept[Unit,OberonVisitor[Unit]](this)
     }
   }
 
   def isModuleCore(module: OberonModule): Boolean = {
     isCore = true
-    module.stmt.get.accept(this)
+    module.stmt.get.accept[Unit,OberonVisitor[Unit]](this)
     if (!isCore){
       isCore
     }
     else{
-      module.procedures.foreach{x : Procedure => x.stmt.accept(this)}
+      module.procedures.foreach{x : Procedure => x.stmt.accept[Unit,OberonVisitor[Unit]](this)}
       isCore
     }
   }

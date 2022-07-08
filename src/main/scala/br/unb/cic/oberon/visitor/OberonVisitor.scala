@@ -11,33 +11,18 @@ import br.unb.cic.oberon.ast._
  * elements of the Oberon language.
  *
  * @author rbonifacio
+ * @author m3101
  */
-trait OberonVisitor {
-  type T
-
-  def visit(module: OberonModule) : T
-  def visit(impt: Import) : T
-  def visit(constant: Constant) : T
-  def visit(variable: VariableDeclaration) : T
-  def visit(procedure: Procedure) : T
-  def visit(arg: FormalArg) : T
-  def visit(exp: Expression) : T
-  def visit(stmt: Statement) : T
-  def visit(aType: Type): T
-  def visit(caseAlt: CaseAlternative): T
-  def visit(userType: UserDefinedType): T
+trait OberonVisitor[T] {
+  def visit[V<:Visitable](something: V) : T = ???
 }
-
-abstract class OberonVisitorAdapter extends OberonVisitor {
-  override def visit(module: OberonModule): T = ???   // ??? means: undef
-  override def visit(impt: Import) : T = ???
-  override def visit(constant: Constant): T = ???
-  override def visit(variable: VariableDeclaration): T = ???
-  override def visit(procedure: Procedure): T = ???
-  override def visit(arg: FormalArg): T = ???
-  override def visit(exp: Expression): T = ???
-  override def visit(stmt: Statement): T = ???
-  override def visit(aType: Type): T = ???
-  override def visit(caseAlt: CaseAlternative): T = ???
-  override def visit(userType: UserDefinedType): T = ???
+/**
+  * The definition was later rewritten using type
+  * constructors to fit a more functional approach
+  * and to facilitate pattern matching and reduce
+  * boilerplate code repetitions.
+  * @author m3101
+  */
+trait Visitable {
+  def accept[T,V<:OberonVisitor[T]](v:V):T = v.visit(this)
 }

@@ -11,6 +11,7 @@ import org.rogach.scallop.exceptions
 import java.io.FileOutputStream
 import java.nio.file.{Files, Paths}
 import java.util.Base64
+import br.unb.cic.oberon.ast.Expression
 
 
 /**
@@ -155,7 +156,7 @@ object Main extends App {
       val content = String.join("\n", Files.readAllLines(path))
       val module = ScalaParser.parse(content)
 
-      val result = module.accept(interpreter)
+      val result = module.accept[Unit,Interpreter](interpreter)
     }
     else {
       println("The file '" + conf.interpreter() + "' does not exist")
@@ -211,16 +212,16 @@ object Repl {
           val command = ScalaParser.parserREPL(input)
           command match {
             case v: REPLVarDeclaration =>
-              v.declarations.foreach(variable => variable.accept(interpreter))
+              v.declarations.foreach(variable => variable.accept[Unit,Interpreter](interpreter))
             case c: REPLConstant =>
-              c.constants.accept(interpreter)
+              c.constants.accept[Unit,Interpreter](interpreter)
             case u: REPLUserTypeDeclaration =>
               println(u.userTypes)
-              u.userTypes.accept(interpreter)
+              u.userTypes.accept[Unit,Interpreter](interpreter)
             case s: REPLStatement =>
-              s.stmt.accept(interpreter)
+              s.stmt.accept[Unit,Interpreter](interpreter)
             case e: REPLExpression =>
-              val result = e.exp.accept(expressionEval)
+              val result = e.exp.accept[Expression,EvalExpressionVisitor](expressionEval)
               println(result)
           }
         }
