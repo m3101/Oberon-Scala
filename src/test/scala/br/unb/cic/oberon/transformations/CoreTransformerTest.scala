@@ -57,7 +57,7 @@ class CoreTransformerTest extends AbstractTestSuite {
     val coreModule = coreVisitor.transformModule(module)
 
     interpreter.setTestEnvironment()
-    coreModule.accept(interpreter)
+    coreModule.accept[Unit,Interpreter](interpreter)
     assert(interpreter.env.lookup("x") == Some(IntValue(6)))
     assert(interpreter.env.lookup("factorial") == Some(IntValue(120)))
   }
@@ -111,7 +111,7 @@ class CoreTransformerTest extends AbstractTestSuite {
     val coreModule = coreVisitor.transformModule(module)
 
     interpreter.setTestEnvironment
-    coreModule.accept(interpreter)
+    coreModule.accept[Unit,Interpreter](interpreter)
     assert(interpreter.env.lookup("x") == Some(IntValue(10)))
     assert(interpreter.env.lookup("i") == Some(IntValue(10)))
     assert(interpreter.env.lookup("y") == Some(IntValue(100)))
@@ -175,7 +175,7 @@ class CoreTransformerTest extends AbstractTestSuite {
     val coreModule = coreVisitor.transformModule(module)
 
     interpreter.setTestEnvironment()
-    coreModule.accept(interpreter)
+    coreModule.accept[Unit,Interpreter](interpreter)
 
     assert(module.name == "RepeatUntilModule");
     assert(interpreter.env.lookup("x").contains(IntValue(11)));
@@ -232,7 +232,7 @@ class CoreTransformerTest extends AbstractTestSuite {
     val coreModule = coreVisitor.transformModule(module)
 
     interpreter.setTestEnvironment()
-    coreModule.accept(interpreter)
+    coreModule.accept[Unit,Interpreter](interpreter)
 
     assert(coreModule.name == "RepeatUntilModule")
     assert(interpreter.env.lookup("sum") == Some(IntValue(330)));
@@ -254,7 +254,7 @@ class CoreTransformerTest extends AbstractTestSuite {
     val coreModule = coreVisitor.transformModule(module)
 
     interpreter.setTestEnvironment()
-    coreModule.accept(interpreter)
+    coreModule.accept[Unit,Interpreter](interpreter)
 
     assert(module.name == "RepeatUntilModule");
     assert(interpreter.env.lookup("x").contains(IntValue(11)))
@@ -312,7 +312,7 @@ class CoreTransformerTest extends AbstractTestSuite {
     val coreModule = coreVisitor.transformModule(module)
 
     interpreter.setTestEnvironment()
-    coreModule.accept(interpreter)
+    coreModule.accept[Unit,Interpreter](interpreter)
 
     assert(module.name == "RepeatUntilModule");
     assert(interpreter.env.lookup("x").contains(IntValue(3)));
@@ -365,7 +365,7 @@ class CoreTransformerTest extends AbstractTestSuite {
     val coreModule = coreVisitor.transformModule(module)
 
     interpreter.setTestEnvironment()
-    coreModule.accept(interpreter)
+    coreModule.accept[Unit,Interpreter](interpreter)
 
     assert(module.name == "RepeatUntilModule");
 
@@ -428,7 +428,7 @@ class CoreTransformerTest extends AbstractTestSuite {
     val coreModule = coreVisitor.transformModule(module)
 
     interpreter.setTestEnvironment()
-    coreModule.accept(interpreter)
+    coreModule.accept[Unit,Interpreter](interpreter)
 
     assert(module.name == "RepeatUntilModule");
 
@@ -479,7 +479,7 @@ class CoreTransformerTest extends AbstractTestSuite {
     val coreModule = coreVisitor.transformModule(module)
 
     interpreter.setTestEnvironment()
-    coreModule.accept(interpreter)
+    coreModule.accept[Unit,Interpreter](interpreter)
 
     assert(module.name == "SimpleModule")
 
@@ -534,7 +534,7 @@ class CoreTransformerTest extends AbstractTestSuite {
     val coreModule = coreVisitor.transformModule(module)
 
     interpreter.setTestEnvironment()
-    coreModule.accept(interpreter)
+    coreModule.accept[Unit,Interpreter](interpreter)
 
     assert(module.name == "SimpleModule")
 
@@ -594,7 +594,7 @@ class CoreTransformerTest extends AbstractTestSuite {
     val coreModule = coreVisitor.transformModule(module)
 
     interpreter.setTestEnvironment()
-    coreModule.accept(interpreter)
+    coreModule.accept[Unit,Interpreter](interpreter)
 
     assert(module.name == "SimpleModule")
 
@@ -647,7 +647,7 @@ class CoreTransformerTest extends AbstractTestSuite {
     val coreModule = coreVisitor.transformModule(module)
 
     interpreter.setTestEnvironment()
-    coreModule.accept(interpreter)
+    coreModule.accept[Unit,Interpreter](interpreter)
 
     assert(module.name == "SimpleModule")
 
@@ -667,7 +667,7 @@ class CoreTransformerTest extends AbstractTestSuite {
     val coreModule = coreVisitor.transformModule(module)
 
     interpreter.setTestEnvironment()
-    coreModule.accept(interpreter)
+    coreModule.accept[Unit,Interpreter](interpreter)
 
     assert(module.name == "SimpleModule")
 
@@ -720,7 +720,7 @@ class CoreTransformerTest extends AbstractTestSuite {
     val coreModule = coreVisitor.transformModule(module)
 
     interpreter.setTestEnvironment()
-    coreModule.accept(interpreter)
+    coreModule.accept[Unit,Interpreter](interpreter)
 
     assert(module.name == "SimpleModule")
 
@@ -777,7 +777,7 @@ class CoreTransformerTest extends AbstractTestSuite {
     val coreModule = coreVisitor.transformModule(module)
 
     interpreter.setTestEnvironment
-    coreModule.accept(interpreter)
+    coreModule.accept[Unit,Interpreter](interpreter)
 
     assert(module.name == "SimpleModule")
 
@@ -833,7 +833,7 @@ class CoreTransformerTest extends AbstractTestSuite {
     val coreModule = coreVisitor.transformModule(module)
 
     interpreter.setTestEnvironment()
-    coreModule.accept(interpreter)
+    coreModule.accept[Unit,Interpreter](interpreter)
     assert(module.name == "SimpleModule")
 
     assert(interpreter.env.lookup("xs") == Some(IntValue(0)));
@@ -888,7 +888,7 @@ class CoreTransformerTest extends AbstractTestSuite {
     val coreModule = coreVisitor.transformModule(module)
 
     interpreter.setTestEnvironment()
-    coreModule.accept(interpreter)
+    coreModule.accept[Unit,Interpreter](interpreter)
     assert(module.name == "SimpleModule")
 
     assert(interpreter.env.lookup("xs") == Some(IntValue(10)));
@@ -944,7 +944,7 @@ class CoreTransformerTest extends AbstractTestSuite {
     val coreModule = coreVisitor.transformModule(module)
 
     interpreter.setTestEnvironment()
-    coreModule.accept(interpreter)
+    coreModule.accept[Unit,Interpreter](interpreter)
     assert(module.name == "SimpleRangeCaseModule")
 
     assert(interpreter.env.lookup("xs") == Some(IntValue(5)));
@@ -999,7 +999,7 @@ class CoreTransformerTest extends AbstractTestSuite {
     val coreModule = coreVisitor.transformModule(module)
 
     interpreter.setTestEnvironment()
-    coreModule.accept(interpreter)
+    coreModule.accept[Unit,Interpreter](interpreter)
     assert(module.name == "SimpleRangeCaseModule")
 
     assert(interpreter.env.lookup("xs") == Some(IntValue(20)));

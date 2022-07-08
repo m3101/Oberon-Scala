@@ -22,7 +22,7 @@ class NewTypesTest extends AnyFunSuite{
 
     assert(module.name == "SimpleModule")
 
-    module.accept(interpreter)
+    module.accept[Unit,Interpreter](interpreter)
     assert(interpreter.env.lookup("b") == Some(IntValue(2.toInt))) // FOR TO x
     assert(interpreter.env.lookup("h") == Some(IntValue(8.toInt))) // FOR TO x
     assert(interpreter.env.lookup("n") == Some(IntValue(14.toInt))) // FOR TO x
@@ -59,7 +59,7 @@ class NewTypesTest extends AnyFunSuite{
 
     assert(module.name == "SimpleModule")
 
-    module.accept(interpreter)
+    module.accept[Unit,Interpreter](interpreter)
     assert(interpreter.env.lookup("x") == Some(IntValue(5000))) // FOR TO x
   }
 
@@ -73,7 +73,7 @@ class NewTypesTest extends AnyFunSuite{
 
     assert(module.name == "SimpleModule")
 
-    module.accept(interpreter)
+    module.accept[Unit,Interpreter](interpreter)
     assert(interpreter.env.lookup("x") == Some(RealValue(26.500000005.toFloat))) // FOR TO x
   }
 }

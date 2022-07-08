@@ -22,8 +22,8 @@ class InterpreterTest extends AnyFunSuite {
 
     assert(coreModule.name == "SimpleModule")
 
-    coreModule.accept(interpreter)
-    coreModule.accept(interpreter)
+    coreModule.accept[Unit,Interpreter](interpreter)
+    coreModule.accept[Unit,Interpreter](interpreter)
 
     assert(interpreter.env.lookup("x") == Some(IntValue(5))) // FOR TO x
     assert(interpreter.env.lookup("y") == Some(IntValue(6))) // y = x + 1 (after last FOR)
@@ -39,7 +39,7 @@ class InterpreterTest extends AnyFunSuite {
 
     assert(coreModule.name == "SimpleModule")
 
-    coreModule.accept(interpreter)
+    coreModule.accept[Unit,Interpreter](interpreter)
 
     assert(interpreter.env.lookup("x") == Some(IntValue(1)))
     assert(interpreter.env.lookup("y") == Some(IntValue(120)))
@@ -54,7 +54,7 @@ class InterpreterTest extends AnyFunSuite {
 
     assert(coreModule.name == "SimpleModule")
 
-    coreModule.accept(interpreter)
+    coreModule.accept[Unit,Interpreter](interpreter)
 
     assert(interpreter.env.lookup("x") == Some(IntValue(1)))
     assert(interpreter.env.lookup("y") == Some(IntValue(1)))
@@ -69,7 +69,7 @@ class InterpreterTest extends AnyFunSuite {
 
     assert(coreModule.name == "SimpleModule")
 
-    coreModule.accept(interpreter)
+    coreModule.accept[Unit,Interpreter](interpreter)
 
     assert(interpreter.env.lookup("x") == Some(IntValue(0)))
     assert(interpreter.env.lookup("y") == Some(IntValue(1)))
@@ -82,7 +82,7 @@ class InterpreterTest extends AnyFunSuite {
     val coreVisitor = new CoreVisitor()
     val coreModule = coreVisitor.transformModule(module)
 
-    coreModule.accept(interpreter)
+    coreModule.accept[Unit,Interpreter](interpreter)
 
     assert(interpreter.env.lookup("ant") == Some(IntValue(13)))
 
@@ -96,7 +96,7 @@ class InterpreterTest extends AnyFunSuite {
 
     assert(coreModule.name == "SimpleModule")
 
-    coreModule.accept(interpreter)
+    coreModule.accept[Unit,Interpreter](interpreter)
 
     assert(interpreter.env.lookup("x") == Some(IntValue(15)))
     assert(interpreter.env.lookup("z") == Some(IntValue(18)))
@@ -111,7 +111,7 @@ class InterpreterTest extends AnyFunSuite {
 
     assert(coreModule.name == "SimpleModule")
 
-    coreModule.accept(interpreter)
+    coreModule.accept[Unit,Interpreter](interpreter)
 
     assert(interpreter.env.lookup("x") == Some(IntValue(90)))
     assert(interpreter.env.lookup("z") == Some(IntValue(0)))
@@ -126,7 +126,7 @@ class InterpreterTest extends AnyFunSuite {
 
     assert(coreModule.name == "SimpleModule")
 
-    coreModule.accept(interpreter)
+    coreModule.accept[Unit,Interpreter](interpreter)
 
     assert(interpreter.env.lookup("x") == Some(IntValue(101)))
     assert(interpreter.env.lookup("z") == Some(IntValue(0)))
@@ -141,7 +141,7 @@ class InterpreterTest extends AnyFunSuite {
 
     assert(coreModule.name == "SimpleModule")
 
-    coreModule.accept(interpreter)
+    coreModule.accept[Unit,Interpreter](interpreter)
 
     assert(interpreter.env.lookup("x") == Some(IntValue(101)))
     assert(interpreter.env.lookup("z") == Some(IntValue(2)))
@@ -156,7 +156,7 @@ class InterpreterTest extends AnyFunSuite {
 
     assert(coreModule.name == "SimpleModule")
 
-    coreModule.accept(interpreter)
+    coreModule.accept[Unit,Interpreter](interpreter)
 
     assert(interpreter.env.lookup("x") == Some(IntValue(52)))
     assert(interpreter.env.lookup("z") == Some(IntValue(10)))
@@ -171,7 +171,7 @@ class InterpreterTest extends AnyFunSuite {
 
     assert(coreModule.name == "SimpleModule")
 
-    coreModule.accept(interpreter)
+    coreModule.accept[Unit,Interpreter](interpreter)
 
     assert(interpreter.env.lookup("x") == Some(IntValue(52)))
     assert(interpreter.env.lookup("z") == Some(IntValue(10)))
@@ -186,7 +186,7 @@ class InterpreterTest extends AnyFunSuite {
 
     assert(coreModule.name == "SimpleModule")
 
-    coreModule.accept(interpreter)
+    coreModule.accept[Unit,Interpreter](interpreter)
 
     assert(interpreter.env.lookup("ant") == Some(IntValue(55)))
   }
@@ -199,7 +199,7 @@ class InterpreterTest extends AnyFunSuite {
 
     assert(coreModule.name == "SimpleModule")
 
-    coreModule.accept(interpreter)
+    coreModule.accept[Unit,Interpreter](interpreter)
 
     assert(interpreter.env.lookup("x") == Some(IntValue(1)))
     assert(interpreter.env.lookup("y") == Some(IntValue(24)))
@@ -214,7 +214,7 @@ class InterpreterTest extends AnyFunSuite {
 
     assert(coreModule.name == "SimpleModule")
 
-    coreModule.accept(interpreter)
+    coreModule.accept[Unit,Interpreter](interpreter)
 
     assert(interpreter.env.lookup("x") == Some(IntValue(-50)))
     assert(interpreter.env.lookup("z") == Some(IntValue(10)))
@@ -229,7 +229,7 @@ class InterpreterTest extends AnyFunSuite {
 
     assert(coreModule.name == "SimpleModule")
 
-    coreModule.accept(interpreter)
+    coreModule.accept[Unit,Interpreter](interpreter)
 
     assert(interpreter.env.lookup("x") == Some(IntValue(25)))
     assert(interpreter.env.lookup("z") == Some(IntValue(10)))
@@ -244,7 +244,7 @@ class InterpreterTest extends AnyFunSuite {
 
     assert(coreModule.name == "SimpleModule")
 
-    coreModule.accept(interpreter)
+    coreModule.accept[Unit,Interpreter](interpreter)
 
     assert(interpreter.env.lookup("y") == Some(IntValue(1)));
 
@@ -258,7 +258,7 @@ class InterpreterTest extends AnyFunSuite {
 
     assert(coreModule.name == "SimpleModule")
 
-    coreModule.accept(interpreter)
+    coreModule.accept[Unit,Interpreter](interpreter)
 
     assert(interpreter.env.lookup("y") == Some(IntValue(2)));
 
@@ -272,7 +272,7 @@ class InterpreterTest extends AnyFunSuite {
 
     assert(coreModule.name == "SimpleModule")
 
-    coreModule.accept(interpreter)
+    coreModule.accept[Unit,Interpreter](interpreter)
 
     assert(interpreter.env.lookup("y") == Some(IntValue(3)));
 
@@ -286,7 +286,7 @@ class InterpreterTest extends AnyFunSuite {
 
     assert(coreModule.name == "SimpleModule")
 
-    coreModule.accept(interpreter)
+    coreModule.accept[Unit,Interpreter](interpreter)
 
     assert(interpreter.env.lookup("y") == Some(IntValue(4)));
 
@@ -300,7 +300,7 @@ class InterpreterTest extends AnyFunSuite {
 
     assert(coreModule.name == "SimpleModule")
 
-    coreModule.accept(interpreter)
+    coreModule.accept[Unit,Interpreter](interpreter)
 
     assert(interpreter.env.lookup("y") == Some(IntValue(5)));
 
@@ -314,7 +314,7 @@ class InterpreterTest extends AnyFunSuite {
 
     assert(coreModule.name == "SimpleModule")
 
-    coreModule.accept(interpreter)
+    coreModule.accept[Unit,Interpreter](interpreter)
 
     assert(interpreter.env.lookup("y") == Some(IntValue(2)));
 
@@ -328,7 +328,7 @@ class InterpreterTest extends AnyFunSuite {
 
     assert(coreModule.name == "SimpleModule")
 
-    coreModule.accept(interpreter)
+    coreModule.accept[Unit,Interpreter](interpreter)
 
     assert(interpreter.env.lookup("y") == Some(IntValue(2)));
 
@@ -342,7 +342,7 @@ class InterpreterTest extends AnyFunSuite {
 
     assert(coreModule.name == "SimpleModule")
 
-    coreModule.accept(interpreter)
+    coreModule.accept[Unit,Interpreter](interpreter)
 
     assert(interpreter.env.lookup("y") == Some(IntValue(3)));
 
@@ -356,7 +356,7 @@ class InterpreterTest extends AnyFunSuite {
 
     assert(coreModule.name == "RepeatUntilModule")
 
-    coreModule.accept(interpreter)
+    coreModule.accept[Unit,Interpreter](interpreter)
 
     assert(interpreter.env.lookup("x").contains(IntValue(11)));
     assert(interpreter.env.lookup("sum").contains(IntValue(55)));
@@ -371,7 +371,7 @@ class InterpreterTest extends AnyFunSuite {
 
     assert(coreModule.name == "RepeatUntilModule")
 
-    coreModule.accept(interpreter)
+    coreModule.accept[Unit,Interpreter](interpreter)
 
     assert(interpreter.env.lookup("sum") == Some(IntValue(330)));
     assert(interpreter.env.lookup("x") == Some(IntValue(21)));
@@ -386,7 +386,7 @@ class InterpreterTest extends AnyFunSuite {
 
     assert(coreModule.name == "RepeatUntilModule")
 
-    coreModule.accept(interpreter)
+    coreModule.accept[Unit,Interpreter](interpreter)
 
     assert(interpreter.env.lookup("sum") == Some(IntValue(11)));
 
@@ -400,7 +400,7 @@ class InterpreterTest extends AnyFunSuite {
 
     assert(coreModule.name == "RepeatUntilModule")
 
-    coreModule.accept(interpreter)
+    coreModule.accept[Unit,Interpreter](interpreter)
 
     assert(interpreter.env.lookup("x") == Some(IntValue(20)));
 
@@ -414,7 +414,7 @@ class InterpreterTest extends AnyFunSuite {
 
     assert(coreModule.name == "RepeatUntilModule")
 
-    coreModule.accept(interpreter)
+    coreModule.accept[Unit,Interpreter](interpreter)
 
     assert(interpreter.env.lookup("x") == Some(IntValue(0)));
 
@@ -427,7 +427,7 @@ class InterpreterTest extends AnyFunSuite {
     val coreModule = coreVisitor.transformModule(module)
 
     assert(coreModule.name == "RepeatUntilModule")
-    coreModule.accept(interpreter)
+    coreModule.accept[Unit,Interpreter](interpreter)
 
     assert(interpreter.env.lookup("x") == Some(IntValue(11)));
     assert(interpreter.env.lookup("y") == Some(IntValue(40)));
@@ -442,7 +442,7 @@ class InterpreterTest extends AnyFunSuite {
 
     assert(coreModule.name == "RepeatUntilModule")
 
-    coreModule.accept(interpreter)
+    coreModule.accept[Unit,Interpreter](interpreter)
 
     assert(interpreter.env.lookup("x") == Some(IntValue(3)));
     assert(interpreter.env.lookup("y") == Some(IntValue(3)));
@@ -456,7 +456,7 @@ class InterpreterTest extends AnyFunSuite {
 
     assert(coreModule.name == "RepeatUntilModule")
 
-    coreModule.accept(interpreter)
+    coreModule.accept[Unit,Interpreter](interpreter)
 
     assert(interpreter.env.lookup("x") == Some(IntValue(10)));
     assert(interpreter.env.lookup("y") == Some(IntValue(10)));
@@ -475,7 +475,7 @@ class InterpreterTest extends AnyFunSuite {
 
     assert(coreModule.name == "LoopStmt")
 
-    coreModule.accept(interpreter)
+    coreModule.accept[Unit,Interpreter](interpreter)
     assert(interpreter.env.lookup("x") == Some(IntValue(-1)))
   }
 
@@ -492,7 +492,7 @@ class InterpreterTest extends AnyFunSuite {
 
     assert(coreModule.name == "LoopStmt")
 
-    coreModule.accept(interpreter)
+    coreModule.accept[Unit,Interpreter](interpreter)
     assert(interpreter.env.lookup("x") == Some(IntValue(6)))
     assert(interpreter.env.lookup("factorial") == Some(IntValue(120)))
   }
@@ -510,7 +510,7 @@ class InterpreterTest extends AnyFunSuite {
 
     assert(coreModule.name == "LoopStmt")
 
-    coreModule.accept(interpreter)
+    coreModule.accept[Unit,Interpreter](interpreter)
     assert(interpreter.env.lookup("x") == Some(IntValue(10)))
     assert(interpreter.env.lookup("y") == Some(IntValue(100)))
   }
@@ -524,7 +524,7 @@ class InterpreterTest extends AnyFunSuite {
 
     assert(coreModule.name == "UserTypeModule")
 
-    coreModule.accept(interpreter)
+    coreModule.accept[Unit,Interpreter](interpreter)
     assert(interpreter.env.lookupArrayIndex("a", 0).contains(IntValue(5)))
     assert(interpreter.env.lookupArrayIndex("b", 1).contains(IntValue(10)))
   }
@@ -537,7 +537,7 @@ class InterpreterTest extends AnyFunSuite {
 
     assert(coreModule.name == "UserTypeModule")
 
-    coreModule.accept(interpreter)
+    coreModule.accept[Unit,Interpreter](interpreter)
     assert(interpreter.env.lookupArrayIndex("a", 0).contains(IntValue(5)))
     assert(interpreter.env.lookupArrayIndex("a", 1).contains(IntValue(10)))
     assert(interpreter.env.lookupArrayIndex("b", 0).contains(IntValue(10)))
@@ -552,7 +552,7 @@ class InterpreterTest extends AnyFunSuite {
 
     assert(coreModule.name == "UserTypeModule")
 
-    coreModule.accept(interpreter)
+    coreModule.accept[Unit,Interpreter](interpreter)
     assert(interpreter.env.lookupArrayIndex("a", 0).contains(IntValue(5)))
     assert(interpreter.env.lookupArrayIndex("a", 2).contains(IntValue(25)))
   }
@@ -565,7 +565,7 @@ class InterpreterTest extends AnyFunSuite {
 
     assert(coreModule.name == "A")
 
-    coreModule.accept(interpreter)
+    coreModule.accept[Unit,Interpreter](interpreter)
     assert(interpreter.env.lookup("x").isDefined)
     assert(interpreter.env.lookup("x") == Some(IntValue(1)))
   }
@@ -578,7 +578,7 @@ class InterpreterTest extends AnyFunSuite {
 
     assert(coreModule.name == "B")
 
-    coreModule.accept(interpreter)
+    coreModule.accept[Unit,Interpreter](interpreter)
     assert(interpreter.env.lookup("x").isDefined)
     assert(interpreter.env.lookup("x") == Some(IntValue(1)))
   }
@@ -592,7 +592,7 @@ class InterpreterTest extends AnyFunSuite {
 
     assert(coreModule.name == "F")
 
-    coreModule.accept(interpreter)
+    coreModule.accept[Unit,Interpreter](interpreter)
     assert(interpreter.env.lookup("x").isDefined)
     assert(interpreter.env.lookup("x") == Some(IntValue(1)))
   }
@@ -605,7 +605,7 @@ class InterpreterTest extends AnyFunSuite {
 
     assert(coreModule.name == "D")
 
-    coreModule.accept(interpreter)
+    coreModule.accept[Unit,Interpreter](interpreter)
     assert(interpreter.env.lookup("x").isDefined)
     assert(interpreter.env.lookup("x") == Some(IntValue(1)))
     //assert(interpreter.env.lookup("x") == Some(IntValue(2)))
@@ -615,7 +615,7 @@ class InterpreterTest extends AnyFunSuite {
     val module = ScalaParser.parseResource("stmts/ArrayAssignmentStmt03.oberon")
 
     assert(module.name == "ArrayAssignmentStmt03")
-    module.accept(interpreter)
+    module.accept[Unit,Interpreter](interpreter)
     assert(interpreter.env.lookup("array").isDefined)
     assert(interpreter.env.lookup("outroarray").isDefined)
 
@@ -632,7 +632,7 @@ class InterpreterTest extends AnyFunSuite {
     val module = ScalaParser.parseResource("stmts/ArrayAssignmentStmt06.oberon")
 
     assert(module.name == "ArrayAssignmentStmt06")
-    module.accept(interpreter)
+    module.accept[Unit,Interpreter](interpreter)
     assert(interpreter.env.lookup("i").isDefined)
     assert(interpreter.env.lookup("arr").isDefined)
 
@@ -647,7 +647,7 @@ class InterpreterTest extends AnyFunSuite {
     val module = ScalaParser.parseResource("aritmetic/aritmetic37.oberon")
 
     assert(module.name == "Aritmetic37")
-    module.accept(interpreter)
+    module.accept[Unit,Interpreter](interpreter)
 
     assert(interpreter.env.lookup("x") == Some(IntValue(5)))
     assert(interpreter.env.lookup("y") == Some(IntValue(3)))
@@ -660,7 +660,7 @@ class InterpreterTest extends AnyFunSuite {
     val module = ScalaParser.parseResource("procedures/procedure06.oberon")
 
     assert(module.name == "Procedure06")
-    module.accept(interpreter)
+    module.accept[Unit,Interpreter](interpreter)
 
     assert(interpreter.env.lookup("a") == Some(IntValue(2)))
     assert(interpreter.env.lookup("b") == Some(IntValue(4)))
@@ -673,7 +673,7 @@ class InterpreterTest extends AnyFunSuite {
 
     assert(module.name == "Boolean32")
 
-    module.accept(interpreter)
+    module.accept[Unit,Interpreter](interpreter)
 
     assert(interpreter.env.lookup("x") == Some(BoolValue(true)))
     assert(interpreter.env.lookup("a") == Some(BoolValue(false)))

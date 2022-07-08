@@ -14,7 +14,7 @@ class InterpreterVisitorTest extends AnyFunSuite{
     assert(module.name == "SimpleModule")
 
     interpreter.setTestEnvironment()
-    module.accept(interpreter)
+    module.accept[Unit,Interpreter](interpreter)
 
     assert(interpreter.env.lookup("x") == Some(IntValue(625)))
     assert(interpreter.env.lookup("y") == Some(IntValue(100)))
@@ -27,7 +27,7 @@ class InterpreterVisitorTest extends AnyFunSuite{
     assert(module.name == "Factorial")
 
     interpreter.setTestEnvironment()
-    module.accept(interpreter)
+    module.accept[Unit,Interpreter](interpreter)
 
     assert(interpreter.env.lookup("res").isDefined)
     assert(interpreter.env.lookup("res") == Some(IntValue(120)))

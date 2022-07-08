@@ -12,11 +12,11 @@ class EvalExpressionVisitorTest extends AnyFunSuite {
     val bTrue = BoolValue(true)
     val bFalse = BoolValue(false)
 
-    assert(val10.accept(visitor) == val10)
+    assert(val10.accept[Expression,EvalExpressionVisitor](visitor) == val10)
 
-    assert(bTrue.accept(visitor) == bTrue)
+    assert(bTrue.accept[Expression,EvalExpressionVisitor](visitor) == bTrue)
 
-    assert(bFalse.accept(visitor) == bFalse)
+    assert(bFalse.accept[Expression,EvalExpressionVisitor](visitor) == bFalse)
   }
 
   test("Test eval on arithmetic expressions (add and mult)") {
@@ -26,7 +26,7 @@ class EvalExpressionVisitorTest extends AnyFunSuite {
     val val30 = IntValue(30)
 
     val exp = AddExpression(val10, MultExpression(val20, val30))
-    assert(exp.accept(visitor) == IntValue(610))
+    assert(exp.accept[Expression,EvalExpressionVisitor](visitor) == IntValue(610))
   }
 
   test("Test eval on arithmetic expressions (sub and div)") {
@@ -36,7 +36,7 @@ class EvalExpressionVisitorTest extends AnyFunSuite {
     val val30 = IntValue(30)
 
     val exp = SubExpression(val20, DivExpression(val30, val10))
-    assert(exp.accept(visitor) == IntValue(17))
+    assert(exp.accept[Expression,EvalExpressionVisitor](visitor) == IntValue(17))
   }
 
   test("Test eval on boolean expressions ('and' and 'or')") {
@@ -47,7 +47,7 @@ class EvalExpressionVisitorTest extends AnyFunSuite {
 
 
     val exp = AndExpression(valTrue, AndExpression(valTrue, OrExpression(valTrue, valFalse)))
-    assert(exp.accept(visitor) == valTrue)
+    assert(exp.accept[Expression,EvalExpressionVisitor](visitor) == valTrue)
   }
 
   test("Test eval on global variables") {
@@ -58,7 +58,7 @@ class EvalExpressionVisitorTest extends AnyFunSuite {
 
     val exp = AddExpression(IntValue(10), VarExpression("x"))
 
-    assert(exp.accept(visitor) == IntValue(40))
+    assert(exp.accept[Expression,EvalExpressionVisitor](visitor) == IntValue(40))
   }
 
   test("Test eval on local (stack) and global variables") {
@@ -70,7 +70,7 @@ class EvalExpressionVisitorTest extends AnyFunSuite {
 
     val exp = AddExpression(VarExpression("x"), VarExpression("y"))
 
-    assert(exp.accept(visitor) == IntValue(40))
+    assert(exp.accept[Expression,EvalExpressionVisitor](visitor) == IntValue(40))
   }
 
   // TODO: Write test cases  dealing with different scopes and name collision.

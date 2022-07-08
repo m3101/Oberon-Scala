@@ -16,7 +16,7 @@ class StandardLibraryTest extends AnyFunSuite {
 
     assert(module.name == "INCTest")
 
-    module.accept[Unit](interpreter)
+    module.accept[Unit,Interpreter](interpreter)
 
     assert(interpreter.env.lookup("x") == Some(RealValue(10.0)))
     assert(interpreter.env.lookup("y") == Some(IntValue(-7)))
@@ -28,7 +28,7 @@ class StandardLibraryTest extends AnyFunSuite {
 
     assert(module.name == "DECTest")
 
-    module.accept(interpreter)
+    module.accept[Unit,Interpreter](interpreter)
 
     assert(interpreter.env.lookup("x") == Some(IntValue(8)))
     assert(interpreter.env.lookup("y") == Some(RealValue(-9.0)))
@@ -41,7 +41,7 @@ class StandardLibraryTest extends AnyFunSuite {
     assert(module.name == "ABSTest")
 
 
-    module.accept(interpreter)
+    module.accept[Unit,Interpreter](interpreter)
     assert(interpreter.env.lookup("x") == Some(IntValue(-10)))
     assert(interpreter.env.lookup("y") == Some(IntValue(10)))
     assert(interpreter.env.lookup("z") == Some(IntValue(10)))
@@ -53,7 +53,7 @@ class StandardLibraryTest extends AnyFunSuite {
     assert(module.name == "ODDTest")
 
 
-    module.accept(interpreter)
+    module.accept[Unit,Interpreter](interpreter)
 
     assert(interpreter.env.lookup("x") == Some(IntValue(10)))
     assert(interpreter.env.lookup("y") == Some(IntValue(11)))
@@ -67,7 +67,7 @@ class StandardLibraryTest extends AnyFunSuite {
     assert(module.name == "FLOORTest")
 
 
-    module.accept(interpreter)
+    module.accept[Unit,Interpreter](interpreter)
 
     assert(interpreter.env.lookup("y") == Some(IntValue(10)))
     assert(interpreter.env.lookup("z") == Some(IntValue(50)))
@@ -79,7 +79,7 @@ class StandardLibraryTest extends AnyFunSuite {
     assert(module.name == "RNDTest")
 
 
-    module.accept(interpreter)
+    module.accept[Unit,Interpreter](interpreter)
 
     assert(interpreter.env.lookup("y") == Some(IntValue(10)))
     assert(interpreter.env.lookup("z") == Some(IntValue(-1)))
@@ -91,7 +91,7 @@ class StandardLibraryTest extends AnyFunSuite {
     assert(module.name == "FLTTest")
 
 
-    module.accept(interpreter)
+    module.accept[Unit,Interpreter](interpreter)
 
     assert(interpreter.env.lookup("y") == Some(RealValue(-8.0)))
     assert(interpreter.env.lookup("z") == Some(RealValue(2.0)))
@@ -103,7 +103,7 @@ class StandardLibraryTest extends AnyFunSuite {
     assert(module.name == "POWTest")
 
 
-    module.accept(interpreter)
+    module.accept[Unit,Interpreter](interpreter)
 
     assert(interpreter.env.lookup("z") == Some(RealValue(0.25298221281347033)))
     assert(interpreter.env.lookup("w") == Some(RealValue(-729.0)))
@@ -115,7 +115,7 @@ class StandardLibraryTest extends AnyFunSuite {
     assert(module.name == "SQRTest")
 
 
-    module.accept(interpreter)
+    module.accept[Unit,Interpreter](interpreter)
 
     assert(interpreter.env.lookup("z") == Some(RealValue(14.0)))
     assert(interpreter.env.lookup("y") == Some(RealValue(3.1622776601683795)))
@@ -127,7 +127,7 @@ class StandardLibraryTest extends AnyFunSuite {
     assert(module.name == "CEILTest")
 
 
-    module.accept(interpreter)
+    module.accept[Unit,Interpreter](interpreter)
 
     assert(interpreter.env.lookup("z") == Some(IntValue(10)))
     assert(interpreter.env.lookup("w") == Some(IntValue(12)))
@@ -140,7 +140,7 @@ class StandardLibraryTest extends AnyFunSuite {
     assert(module.name == "READFILETest")
 
 
-    module.accept(interpreter)
+    module.accept[Unit,Interpreter](interpreter)
 
     assert(interpreter.env.lookup("y") == Some(StringValue("Lorem ipsum dolor sit amet, consectetur adipiscing elit.Testando append")))
 
@@ -152,7 +152,7 @@ class StandardLibraryTest extends AnyFunSuite {
     assert(module.name == "WRITEFILETest")
 
 
-    module.accept(interpreter)
+    module.accept[Unit,Interpreter](interpreter)
 
     assert(interpreter.env.lookup("x") == Some(StringValue("src/test/resources/stdlib/plainFile.txt")))
     assert(interpreter.env.lookup("y") == Some(StringValue("Lorem ipsum dolor sit amet, consectetur adipiscing elit.")))
@@ -170,7 +170,7 @@ class StandardLibraryTest extends AnyFunSuite {
     assert(module.name == "APPENDFILETest")
 
 
-    module.accept(interpreter)
+    module.accept[Unit,Interpreter](interpreter)
 
     assert(interpreter.env.lookup("x") == Some(StringValue("src/test/resources/stdlib/plainFile.txt")))
     assert(interpreter.env.lookup("w") == Some(StringValue("Lorem ipsum dolor sit amet, consectetur adipiscing elit.Testando append")))
