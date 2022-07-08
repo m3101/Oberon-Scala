@@ -38,16 +38,16 @@ class Interpreter extends OberonVisitor[Unit] {
 
   def visit(module: OberonModule): Unit = {
     // set up the global declarations
-    module.constants.foreach(c => c.accept[Unit,Interpreter](this))
-    module.variables.foreach(v => v.accept[Unit,Interpreter](this))
-    module.procedures.foreach(p => p.accept[Unit,Interpreter](this))
-    module.userTypes.foreach(userType => userType.accept[Unit,Interpreter](this))
+    module.constants.foreach(c => c.accept(this))
+    module.variables.foreach(v => v.accept(this))
+    module.procedures.foreach(p => p.accept(this))
+    module.userTypes.foreach(userType => userType.accept(this))
 
     // execute the statement if it is defined.
     // remember, module.stmt is an Option[Statement].
     if (module.stmt.isDefined) {
       setupStandardLibraries()
-      module.stmt.get.accept[Unit,Interpreter](this)
+      module.stmt.get.accept(this)
     }
   }
 
@@ -98,7 +98,7 @@ class Interpreter extends OberonVisitor[Unit] {
         }
 
       case SequenceStmt(stmts) =>
-        stmts.foreach(s => s.accept[Unit,Interpreter](this))
+        stmts.foreach(s => s.accept(this))
 
       case ReadRealStmt(name) =>
         env.setVariable(name, RealValue(StdIn.readLine().toFloat))
@@ -115,12 +115,12 @@ class Interpreter extends OberonVisitor[Unit] {
 
 
       case IfElseStmt(condition, thenStmt, elseStmt) =>
-        if (evalCondition(condition)) thenStmt.accept[Unit,Interpreter](this)
-        else if (elseStmt.isDefined) elseStmt.get.accept[Unit,Interpreter](this)
+        if (evalCondition(condition)) thenStmt.accept(this)
+        else if (elseStmt.isDefined) elseStmt.get.accept(this)
 
       case WhileStmt(condition, whileStmt) =>
         while (evalCondition(condition) && exit == false )
-          whileStmt.accept[Unit,Interpreter](this)
+          whileStmt.accept(this)
         exit = false
 
       case ExitStmt() =>
@@ -129,7 +129,7 @@ class Interpreter extends OberonVisitor[Unit] {
       case ReturnStmt(exp: Expression) =>
         setReturnExpression(evalExpression(exp))
 
-      case MetaStmt(f) => f().accept[Unit,Interpreter](this)
+      case MetaStmt(f) => f().accept(this)
 
       case ProcedureCallStmt(name, args) =>
         val actualArguments = args map (arg => arg -> evalExpression(arg)) toMap
@@ -145,18 +145,18 @@ class Interpreter extends OberonVisitor[Unit] {
     var matched = false
     var i = 0
 
-    if (evalCondition(condition)) thenStmt.accept[Unit,Interpreter](this)
+    if (evalCondition(condition)) thenStmt.accept(this)
     else {
       while (i < listOfElseIf.size && !matched) {
         listOfElseIf(i) match {
           case ElseIfStmt(condition, stmt) => if (evalCondition(condition)) {
-            stmt.accept[Unit,Interpreter](this)
+            stmt.accept(this)
             matched = true
           }
         }
         i += 1
       }
-      if (!matched && elseStmt.isDefined) elseStmt.get.accept[Unit,Interpreter](this)
+      if (!matched && elseStmt.isDefined) elseStmt.get.accept(this)
     }
   }
 
@@ -172,7 +172,7 @@ class Interpreter extends OberonVisitor[Unit] {
   def visitProcedureCall(name: String, args: Map[Expression, Expression]): Unit = {
     val procedure = env.findProcedure(name)
     updateEnvironmentWithProcedureCall(procedure, args)
-    procedure.stmt.accept[Unit,Interpreter](this)
+    procedure.stmt.accept(this)
   }
 
   def updateEnvironmentWithProcedureCall(procedure: Procedure, args: Map[Expression, Expression]): Unit = {
@@ -193,12 +193,12 @@ class Interpreter extends OberonVisitor[Unit] {
 
   def evalCondition(expression: Expression): Boolean = {
     val evalVisitor = new EvalExpressionVisitor(this)
-    expression.accept[Expression,EvalExpressionVisitor](evalVisitor).asInstanceOf[BoolValue].value
+    expression.accept(evalVisitor).asInstanceOf[BoolValue].value
   }
 
   def evalExpression(expression: Expression): Expression = {
     val evalVisitor = new EvalExpressionVisitor(this)
-    expression.accept[Expression,EvalExpressionVisitor](evalVisitor)
+    expression.accept(evalVisitor)
   }
 
   /*
@@ -225,7 +225,7 @@ class Interpreter extends OberonVisitor[Unit] {
 class EvalExpressionVisitor(val interpreter: Interpreter) extends OberonVisitor[Expression] {
 
   def visit(exp: Expression): Expression = exp match {
-    case Brackets(expression) => expression.accept[Expression,EvalExpressionVisitor](this)
+    case Brackets(expression) => expression.accept(this)
     case IntValue(v) => IntValue(v)
     case RealValue(v) => RealValue(v)
     case CharValue(v) => CharValue(v)
@@ -235,7 +235,7 @@ class EvalExpressionVisitor(val interpreter: Interpreter) extends OberonVisitor[
     case Undef() => Undef()
     case VarExpression(name) => interpreter.env.lookup(name).get
     case ArraySubscript(arrayBase, index) => arrayBase match {
-      case VarExpression(name) => interpreter.env.lookupArrayIndex(name, index.accept[Expression,EvalExpressionVisitor](this).asInstanceOf[Value]
+      case VarExpression(name) => interpreter.env.lookupArrayIndex(name, index.accept(this).asInstanceOf[Value]
         .value.asInstanceOf[Int]).get
     }
     case AddExpression(left, right) => arithmeticExpression(left, right, (v1: Number, v2: Number) => v1+v2)
@@ -249,11 +249,11 @@ class EvalExpressionVisitor(val interpreter: Interpreter) extends OberonVisitor[
     case LTExpression(left, right) => binExpression(left, right, (v1: Value, v2: Value) => BoolValue(v1 < v2))
     case GTEExpression(left, right) => binExpression(left, right, (v1: Value, v2: Value) => BoolValue(v1 >= v2))
     case LTEExpression(left, right) => binExpression(left, right, (v1: Value, v2: Value) => BoolValue(v1 <= v2))
-    case NotExpression(exp) => BoolValue(!exp.accept[Expression,EvalExpressionVisitor](this).asInstanceOf[Value].value.asInstanceOf[Boolean])
+    case NotExpression(exp) => BoolValue(!exp.accept(this).asInstanceOf[Value].value.asInstanceOf[Boolean])
     case AndExpression(left, right) => binExpression(left, right, (v1: Value, v2: Value) => BoolValue(v1.value.asInstanceOf[Boolean] && v2.value.asInstanceOf[Boolean]))
     case OrExpression(left, right) => binExpression(left, right, (v1: Value, v2: Value) => BoolValue(v1.value.asInstanceOf[Boolean] || v2.value.asInstanceOf[Boolean]))
     case FunctionCallExpression(name, args) => {
-      val actualArguments = args map (arg => arg -> arg.accept[Expression,EvalExpressionVisitor](this)) toMap
+      val actualArguments = args map (arg => arg -> arg.accept(this)) toMap
 
       interpreter.env.push()
       val exp = visitFunctionCall(name, actualArguments)
@@ -284,8 +284,8 @@ class EvalExpressionVisitor(val interpreter: Interpreter) extends OberonVisitor[
    *         numbers.
    */
   def arithmeticExpression(left: Expression, right: Expression, fn: (Number, Number) => Number): Expression = {
-    val vl = left.accept[Expression,EvalExpressionVisitor](this).asInstanceOf[Number]
-    val vr = right.accept[Expression,EvalExpressionVisitor](this).asInstanceOf[Number]
+    val vl = left.accept(this).asInstanceOf[Number]
+    val vr = right.accept(this).asInstanceOf[Number]
 
     fn(vl, vr)
   }
@@ -301,8 +301,8 @@ class EvalExpressionVisitor(val interpreter: Interpreter) extends OberonVisitor[
    *         numbers.
    */
   def modularExpression(left: Expression, right: Expression, fn: (Modular, Modular) => Modular): Expression = {
-    val vl = left.accept[Expression,EvalExpressionVisitor](this).asInstanceOf[Modular]
-    val vr = right.accept[Expression,EvalExpressionVisitor](this).asInstanceOf[Modular]
+    val vl = left.accept(this).asInstanceOf[Modular]
+    val vr = right.accept(this).asInstanceOf[Modular]
 
     fn(vl, vr)
   }
@@ -318,8 +318,8 @@ class EvalExpressionVisitor(val interpreter: Interpreter) extends OberonVisitor[
    *              after applying this function.
    */
   def binExpression(left: Expression, right: Expression, fn: (Value, Value) => Expression): Expression = {
-    val v1 = left.accept[Expression,EvalExpressionVisitor](this).asInstanceOf[Value]
-    val v2 = right.accept[Expression,EvalExpressionVisitor](this).asInstanceOf[Value]
+    val v1 = left.accept(this).asInstanceOf[Value]
+    val v2 = right.accept(this).asInstanceOf[Value]
 
     fn(v1, v2)
   }

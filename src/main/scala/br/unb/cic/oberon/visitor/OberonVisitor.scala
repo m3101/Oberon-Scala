@@ -13,7 +13,7 @@ import br.unb.cic.oberon.ast._
  * @author rbonifacio
  * @author m3101
  */
-trait OberonVisitor[T] {
+trait OberonVisitor[+T] {
   def visit[V<:Visitable](something: V) : T = ???
 }
 /**
@@ -24,5 +24,5 @@ trait OberonVisitor[T] {
   * @author m3101
   */
 trait Visitable {
-  def accept[T,V<:OberonVisitor[T]](v:V):T = v.visit(this)
+  def accept[T](v:OberonVisitor[T]):T = v.visit(this)
 }

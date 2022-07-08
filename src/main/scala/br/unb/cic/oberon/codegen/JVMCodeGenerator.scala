@@ -52,7 +52,7 @@ object JVMCodeGenerator extends CodeGenerator {
 
     constants.map {
       case (constant) => 
-        val v = constant.exp.accept[Expression,EvalExpressionVisitor](visitor)
+        val v = constant.exp.accept(visitor)
 
         v match {
           case IntValue (value) => {

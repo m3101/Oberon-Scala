@@ -156,7 +156,7 @@ object Main extends App {
       val content = String.join("\n", Files.readAllLines(path))
       val module = ScalaParser.parse(content)
 
-      val result = module.accept[Unit,Interpreter](interpreter)
+      val result = module.accept(interpreter)
     }
     else {
       println("The file '" + conf.interpreter() + "' does not exist")
@@ -212,16 +212,16 @@ object Repl {
           val command = ScalaParser.parserREPL(input)
           command match {
             case v: REPLVarDeclaration =>
-              v.declarations.foreach(variable => variable.accept[Unit,Interpreter](interpreter))
+              v.declarations.foreach(variable => variable.accept(interpreter))
             case c: REPLConstant =>
-              c.constants.accept[Unit,Interpreter](interpreter)
+              c.constants.accept(interpreter)
             case u: REPLUserTypeDeclaration =>
               println(u.userTypes)
-              u.userTypes.accept[Unit,Interpreter](interpreter)
+              u.userTypes.accept(interpreter)
             case s: REPLStatement =>
-              s.stmt.accept[Unit,Interpreter](interpreter)
+              s.stmt.accept(interpreter)
             case e: REPLExpression =>
-              val result = e.exp.accept[Expression,EvalExpressionVisitor](expressionEval)
+              val result = e.exp.accept(expressionEval)
               println(result)
           }
         }

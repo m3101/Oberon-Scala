@@ -13,11 +13,11 @@ class ExpressionTypeVisitorTestSuite extends AnyFunSuite {
       val bTrue = BoolValue(true)
       val bFalse = BoolValue(false)
 
-      assert(val10.accept[Option[Type],ExpressionTypeVisitor](visitor) == Some(IntegerType))
+      assert(val10.accept(visitor) == Some(IntegerType))
 
-      assert(bTrue.accept[Option[Type],ExpressionTypeVisitor](visitor) == Some(BooleanType))
+      assert(bTrue.accept(visitor) == Some(BooleanType))
 
-      assert(bFalse.accept[Option[Type],ExpressionTypeVisitor](visitor) == Some(BooleanType))
+      assert(bFalse.accept(visitor) == Some(BooleanType))
     }
 
   test("Test expression type on add expressions") {
@@ -28,9 +28,9 @@ class ExpressionTypeVisitorTestSuite extends AnyFunSuite {
     val add02 = AddExpression(val10, add01)
     val add03 = AddExpression(add01, add02)
 
-    assert(add01.accept[Option[Type],ExpressionTypeVisitor](visitor) == Some(IntegerType))
-    assert(add02.accept[Option[Type],ExpressionTypeVisitor](visitor) == Some(IntegerType))
-    assert(add03.accept[Option[Type],ExpressionTypeVisitor](visitor) == Some(IntegerType))
+    assert(add01.accept(visitor) == Some(IntegerType))
+    assert(add02.accept(visitor) == Some(IntegerType))
+    assert(add03.accept(visitor) == Some(IntegerType))
   }
 
   test("Test expression type on sub expressions") {
@@ -41,9 +41,9 @@ class ExpressionTypeVisitorTestSuite extends AnyFunSuite {
     val sub02 = SubExpression(val10, sub01)
     val sub03 = SubExpression(sub01, sub02)
 
-    assert(sub01.accept[Option[Type],ExpressionTypeVisitor](visitor) == Some(IntegerType))
-    assert(sub02.accept[Option[Type],ExpressionTypeVisitor](visitor) == Some(IntegerType))
-    assert(sub03.accept[Option[Type],ExpressionTypeVisitor](visitor) == Some(IntegerType))
+    assert(sub01.accept(visitor) == Some(IntegerType))
+    assert(sub02.accept(visitor) == Some(IntegerType))
+    assert(sub03.accept(visitor) == Some(IntegerType))
   }
 
   test("Test expression type on div expressions") {
@@ -54,9 +54,9 @@ class ExpressionTypeVisitorTestSuite extends AnyFunSuite {
     val sub02 = DivExpression(val10, sub01)
     val sub03 = DivExpression(sub01, sub02)
 
-    assert(sub01.accept[Option[Type],ExpressionTypeVisitor](visitor) == Some(IntegerType))
-    assert(sub02.accept[Option[Type],ExpressionTypeVisitor](visitor) == Some(IntegerType))
-    assert(sub03.accept[Option[Type],ExpressionTypeVisitor](visitor) == Some(IntegerType))
+    assert(sub01.accept(visitor) == Some(IntegerType))
+    assert(sub02.accept(visitor) == Some(IntegerType))
+    assert(sub03.accept(visitor) == Some(IntegerType))
   }
 
   test("Test expression type on mult expressions") {
@@ -67,9 +67,9 @@ class ExpressionTypeVisitorTestSuite extends AnyFunSuite {
     val mult02 = AddExpression(val10, mult01)
     val mult03 = AddExpression(mult01, mult02)
 
-    assert(mult01.accept[Option[Type],ExpressionTypeVisitor](visitor) == Some(IntegerType))
-    assert(mult02.accept[Option[Type],ExpressionTypeVisitor](visitor) == Some(IntegerType))
-    assert(mult03.accept[Option[Type],ExpressionTypeVisitor](visitor) == Some(IntegerType))
+    assert(mult01.accept(visitor) == Some(IntegerType))
+    assert(mult02.accept(visitor) == Some(IntegerType))
+    assert(mult03.accept(visitor) == Some(IntegerType))
   }
 
   test("Test expression type on eq expressions") {
@@ -78,7 +78,7 @@ class ExpressionTypeVisitorTestSuite extends AnyFunSuite {
     val val20 = IntValue(20)
     val eq01 = EQExpression(val10, val20)
 
-    assert(eq01.accept[Option[Type],ExpressionTypeVisitor](visitor) == Some(BooleanType))
+    assert(eq01.accept(visitor) == Some(BooleanType))
   }
 
   test("Test expression add with boolean values") {
@@ -87,7 +87,7 @@ class ExpressionTypeVisitorTestSuite extends AnyFunSuite {
     val valTrue = BoolValue(true)
     val invalidAdd = AddExpression(val10, valTrue)
 
-    assert(invalidAdd.accept[Option[Type],ExpressionTypeVisitor](visitor) == None)
+    assert(invalidAdd.accept(visitor) == None)
   }
 
 }
